@@ -525,7 +525,7 @@
         <div id="endingCg" class="absolute inset-0 z-[5] hidden opacity-0" aria-hidden="true">
           <img id="endingCgImage" alt="" />
         </div>
-        <img id="characterSprite" src="男生素材/静止站立.png" alt="小星" class="vn-character absolute z-[2] object-contain" onerror="handleSpriteError(this)" />
+        <img id="characterSprite" src="男生素材/静止站立.webp" alt="小星" class="vn-character absolute z-[2] object-contain" onerror="handleSpriteError(this)" />
         <div id="choicePanel" class="absolute bottom-[31%] left-1/2 z-10 hidden w-[min(90%,620px)] -translate-x-1/2 flex-col gap-3"></div>
         <div id="endingBanner" class="absolute left-1/2 top-[18%] z-10 hidden w-[min(90%,760px)] -translate-x-1/2 bg-transparent px-5 py-4 text-center text-base font-bold leading-relaxed text-amber-100 sm:text-xl" role="status"></div>
         <div id="safetyPanel" class="absolute inset-x-4 top-[18%] z-20 mx-auto hidden max-w-xl rounded-3xl border-2 border-rose-300 bg-rose-950/95 p-5 text-center text-white shadow-2xl sm:p-7" role="alert">
@@ -782,18 +782,33 @@
       const clickSeAudio = document.getElementById("clickSe");
       let bgmUnlocked = false;
 
+      function tryPlayBgm() {
+        if (!bgmUnlocked) return;
+        if (bgmAudio.paused) bgmAudio.play().catch(() => {});
+      }
       function unlockAudio() {
         if (bgmUnlocked) return;
         bgmUnlocked = true;
         bgmAudio.volume = 0.35;
-        bgmAudio.play().catch(() => {});
-        clickSeAudio.play().catch(() => {});
+        bgmAudio.loop = true;
+        bgmAudio.preload = "auto";
+        tryPlayBgm();
+        // prime click SE silently
+        const prevVol = clickSeAudio.volume;
+        clickSeAudio.volume = 0;
+        clickSeAudio.play().then(() => { clickSeAudio.pause(); clickSeAudio.currentTime = 0; clickSeAudio.volume = prevVol || 1; }).catch(() => { clickSeAudio.volume = prevVol || 1; });
       }
 
       function playClickSe() {
-        clickSeAudio.currentTime = 0;
-        clickSeAudio.play().catch(() => {});
+        try {
+          clickSeAudio.currentTime = 0;
+          clickSeAudio.play().catch(() => {});
+        } catch (_) {}
       }
+      bgmAudio.addEventListener("ended", () => { bgmAudio.currentTime = 0; tryPlayBgm(); });
+      bgmAudio.addEventListener("stalled", () => { if (bgmUnlocked) { bgmAudio.load(); tryPlayBgm(); } });
+      bgmAudio.addEventListener("error", () => { if (bgmUnlocked) { window.setTimeout(() => { bgmAudio.load(); tryPlayBgm(); }, 1000); } });
+      document.addEventListener("visibilitychange", () => { if (!document.hidden) tryPlayBgm(); });
 
       function createInitialGameState() {
         return {
@@ -836,37 +851,37 @@
       const scenes = {
         classroom: {
           label: "晚自习下的教室",
-          image: "场景/晚自习下的教室.jpg",
+          image: "场景/晚自习下的教室.webp",
           guidance: "故事发生在晚自习后的教室。",
         },
         playground: {
           label: "操场",
-          image: "场景/操场.png",
+          image: "场景/操场.webp",
           guidance: "故事发生在操场。",
         },
         countryRoad: {
           label: "放学后",
-          image: "场景/放学后.jpg",
+          image: "场景/放学后.webp",
           guidance: "故事发生在放学后。",
         },
         desk: {
           label: "家里书桌",
-          image: "场景/家里书桌.jpg",
+          image: "场景/家里书桌.webp",
           guidance: "故事发生在家里的书桌旁。",
         },
         woods: {
           label: "等车站",
-          image: "场景/等车站.jpg",
+          image: "场景/等车站.webp",
           guidance: "故事发生在等车站。",
         },
         treeHollow: {
           label: "夜晚宿舍",
-          image: "场景/夜晚宿舍.png",
+          image: "场景/夜晚宿舍.webp",
           guidance: "故事发生在夜晚的宿舍。",
         },
         sunsetClassroom: {
           label: "傍晚教室",
-          image: "第一周图片/傍晚教室.jpg",
+          image: "第一周图片/傍晚教室.webp",
           guidance: "故事发生在傍晚空教室。",
         },
         rooftopStairs: {
@@ -876,7 +891,7 @@
         },
         nightSky: {
           label: "夜晚星空",
-          image: "第一周图片/夜晚星空.jpg",
+          image: "第一周图片/夜晚星空.webp",
           guidance: "故事发生在夜晚星空。",
         },
         black: {
@@ -887,8 +902,8 @@
       };
 
       const characterSprites = {
-        boy: "男生素材/静止站立.png",
-        girl: "女生素材/静止站立.png",
+        boy: "男生素材/静止站立.webp",
+        girl: "女生素材/静止站立.webp",
       };
 
       const WEEKLY_SCRIPTS = {
@@ -1223,28 +1238,28 @@
 
       const ENDING_CGS = {
         1: {
-          good: { title: "点亮星星的是微光", image: "第一周图片/HE图片.png" },
-          normal: { title: "点亮星星的是微光", image: "第一周图片/NG图片.jpg" },
+          good: { title: "点亮星星的是微光", image: "第一周图片/HE图片.webp" },
+          normal: { title: "点亮星星的是微光", image: "第一周图片/NG图片.webp" },
         },
         2: {
-          good: { title: "被轻轻放下的话", image: "CG/被轻轻放下的话.jpg" },
-          normal: { title: "被窝里的电台", image: "CG/被窝里的电台.jpg" },
+          good: { title: "被轻轻放下的话", image: "CG/被轻轻放下的话.webp" },
+          normal: { title: "被窝里的电台", image: "CG/被窝里的电台.webp" },
         },
         3: {
-          good: { title: "台灯下的微光", image: "CG/台灯下的微光.jpg" },
-          normal: { title: "页边的小光点", image: "CG/页边的小光点.jpg" },
+          good: { title: "台灯下的微光", image: "CG/台灯下的微光.webp" },
+          normal: { title: "页边的小光点", image: "CG/页边的小光点.webp" },
         },
         4: {
-          good: { title: "十七步之后", image: "CG/十七步之后.jpg" },
-          normal: { title: "树影下的观众席", image: "CG/树影下的观众席.jpg" },
+          good: { title: "十七步之后", image: "CG/十七步之后.webp" },
+          normal: { title: "树影下的观众席", image: "CG/树影下的观众席.webp" },
         },
         5: {
-          good: { title: "天平回到中间", image: "CG/天平回到中间.jpg" },
-          normal: { title: "夜风里的纸条", image: "CG/夜风里的纸条.jpg" },
+          good: { title: "天平回到中间", image: "CG/天平回到中间.webp" },
+          normal: { title: "夜风里的纸条", image: "CG/夜风里的纸条.webp" },
         },
         6: {
-          good: { title: "星光叙事主理人", image: "CG/星光叙事主理人.jpg" },
-          normal: { title: "再坐一班车的时间", image: "CG/在坐一班车的时间.jpg" },
+          good: { title: "星光叙事主理人", image: "CG/星光叙事主理人.webp" },
+          normal: { title: "再坐一班车的时间", image: "CG/在坐一班车的时间.webp" },
         },
       };
 
@@ -2118,8 +2133,19 @@
         Object.values(ENDING_CGS).forEach((weekEndings) => {
           Object.values(weekEndings).forEach((ending) => {
             const image = new Image();
+            image.decoding = "async";
             image.src = ending.image;
           });
+        });
+      }
+      function preloadSceneImages() {
+        const urls = new Set();
+        Object.values(scenes).forEach((scene) => { if (scene && scene.image) urls.add(scene.image); });
+        Object.values(CHARACTER_IMAGES).forEach((src) => { if (src) urls.add(src); });
+        urls.forEach((src) => {
+          const image = new Image();
+          image.decoding = "async";
+          image.src = src;
         });
       }
 
@@ -4145,6 +4171,7 @@
 
       function initialize() {
         preloadEndingCGs();
+        preloadSceneImages();
         Object.entries(WEEKLY_SCRIPTS).forEach(([weekNumber, week]) => {
           const value = String(weekNumber);
           weekPicker.add(new Option(`第 ${value} 周 · ${week.title}`, value));
@@ -4322,6 +4349,7 @@
       }
 
       initialize();
+      preloadSceneImages();
 
       document.addEventListener("click", unlockAudio, { once: true });
       document.addEventListener("keydown", unlockAudio, { once: true });
