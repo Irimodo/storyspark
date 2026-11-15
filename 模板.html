@@ -1,0 +1,63 @@
+// 1. 场景配置 (DIY背景图)
+const scenes = {
+  myCustomScene1: {
+    label: "[场景名字，如：黄昏的教室]",
+    image: "[场景图片路径，如：assets/bg1.jpg]",
+    guidance: "[给AI看的背景设定，如：故事发生在无人的教室]"
+  },
+  myCustomScene2: {
+    label: "[场景名字2]",
+    image: "[场景图片路径2]",
+    guidance: "[场景描述2]"
+  }
+};
+
+// 2. 角色立绘配置 (DIY人物图)
+const characterSprites = {
+  boy: "[男生立绘图片路径，如：assets/boy.png]",
+  girl: "[女生立绘图片路径，如：assets/girl.png]",
+  // 你也可以加自定义名字，比如 miyuki: "assets/miyuki.png"
+};
+
+// 3. 每周核心剧情与互动剧本 (DIY剧本空壳)
+const WEEKLY_SCRIPTS = {
+  1: {
+    title: "[第一周的主题名字，如：初次相遇]",
+    scene: "myCustomScene1", // 填上面 scenes 里定义好的场景英文名
+    script: [
+      // speaker可以选: me_monologue(旁白), me(玩家), partner(搭子)
+      // emotion可以选: default, happy, sad, angry, surprised, shy
+      { speaker: "me_monologue", text: "[第一句旁白：今天天气很好...]", showPartner: false },
+      { speaker: "partner", action: "（推开门走进来）", text: "[搭子的第一句话]", showPartner: true, emotion: "default" },
+      { speaker: "me", text: "[玩家的固定台词]", showPartner: true }
+    ],
+    // 两个分支选项：第一个(A)进入AI自由互动，第二个(B)进入普通剧情结尾
+    choices: ["[选项A：进入互动，比如“你想聊点什么？”]", "[选项B：拒绝互动，比如“我今天想一个人静静”]"],
+    
+    // ======== 选择选项A (进入AI互动) 的配置 ========
+    goodIntro: "[选择A后，搭子说的引导语]",
+    inputPlaceholder: "[输入框里给玩家的提示语，如：写下你今天的心情...]",
+    aiGuidance: "[给AI的具体要求，如：扮演一个温柔的学长，鼓励玩家说出心事，每次只问一个小问题。]",
+    targetTurns: 3, // AI互动的轮数（想聊几轮填几）
+    cardTitle: "[通关A结局后，生成的故事卡片名称]",
+    goodEnding: "[A结局的最终旁白描述]",
+    
+    // ======== 选择选项B (直接结束) 的配置 ========
+    normalLines: [
+      "[选择B后，搭子失落或体贴的台词1]",
+      "[选择B后，搭子的台词2]"
+    ],
+    normalEnding: "[B结局的最终旁白描述]"
+  },
+
+  // 如果需要第二周、第三周，直接复制上面 "1: { ... }" 的结构，改成 "2: { ... }" 即可
+};
+
+// 4. 结局CG图配置 (DIY通关过场图)
+const ENDING_CGS = {
+  1: { // 对应第一周
+    good: { title: "[A结局插画标题]", image: "[A结局图片路径，如：assets/cg_good1.jpg]" },
+    normal: { title: "[B结局插画标题]", image: "[B结局图片路径，如：assets/cg_normal1.jpg]" },
+  }
+  // 第2周就接着加 2: { ... }
+};
