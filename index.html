@@ -2590,6 +2590,12 @@
           openSetup();
           return;
         }
+        if (gameState.week === 1 && Array.isArray(gameState.week1EndLines) && gameState.week1EndLines.length > 0) {
+          renderWeek1EndLine();
+          setGameStars();
+          applyPhaseVisibility();
+          return;
+        }
         if (gameState.phase === "script") {
           const savedPage = gameState.currentLinePage;
           const savedDialoguePageIndex = gameState.dialoguePageIndex;
