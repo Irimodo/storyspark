@@ -2140,7 +2140,7 @@
       function preloadSceneImages() {
         const urls = new Set();
         Object.values(scenes).forEach((scene) => { if (scene && scene.image) urls.add(scene.image); });
-        Object.values(CHARACTER_IMAGES).forEach((src) => { if (src) urls.add(src); });
+        Object.values(characterSprites).forEach((src) => { if (src) urls.add(src); });
         urls.forEach((src) => {
           const image = new Image();
           image.decoding = "async";
