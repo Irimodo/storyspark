@@ -108,7 +108,6 @@
       .vn-character.is-visible {
         opacity: 1;
         transform: translateY(0) scale(1);
-        animation: star-drift 4s ease-in-out infinite;
       }
 
       @keyframes star-drift {
@@ -525,7 +524,7 @@
         <div id="endingCg" class="absolute inset-0 z-[5] hidden opacity-0" aria-hidden="true">
           <img id="endingCgImage" alt="" />
         </div>
-        <img id="characterSprite" decoding="async" src="男生素材/静止站立.webp" alt="小星" class="vn-character absolute z-[2] object-contain" onerror="handleSpriteError(this)" />
+        <img id="characterSprite" decoding="async" src="男生素材/男生立绘.webp" alt="小星" class="vn-character absolute z-[2] object-cover object-top" onerror="handleSpriteError(this)" />
         <div id="choicePanel" class="absolute bottom-[31%] left-1/2 z-10 hidden w-[min(90%,620px)] -translate-x-1/2 flex-col gap-3"></div>
         <div id="endingBanner" class="absolute left-1/2 top-[18%] z-10 hidden w-[min(90%,760px)] -translate-x-1/2 bg-transparent px-5 py-4 text-center text-base font-bold leading-relaxed text-amber-100 sm:text-xl" role="status"></div>
         <div id="safetyPanel" class="absolute inset-x-4 top-[18%] z-20 mx-auto hidden max-w-xl rounded-3xl border-2 border-rose-300 bg-rose-950/95 p-5 text-center text-white shadow-2xl sm:p-7" role="alert">
@@ -902,8 +901,8 @@
       };
 
       const characterSprites = {
-        boy: "男生素材/静止站立.webp",
-        girl: "女生素材/静止站立.webp",
+        boy: "男生素材/男生立绘.webp",
+        girl: "女生素材/女生立绘.webp",
       };
 
       const WEEKLY_SCRIPTS = {
